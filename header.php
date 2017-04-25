@@ -2,7 +2,7 @@
 
     require_once("session.php");
     
-    require_once("objects/User.php");
+    require_once("objects/user.php");
     $auth_user = new USER();
     
     

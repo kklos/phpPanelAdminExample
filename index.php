@@ -7,14 +7,14 @@
 include_once 'config/database.php';
 
 //include_once 'objects/product.php';
-//include_once 'objects/category.php';
+include_once 'objects/category.php';
  
 // instantiate database and product object
 $database = new Database();
 $db = $database->getConnection();
  
 //$product = new Product($db);
-//$category = new Category($db);
+$category = new Category($db);
  
 $page_title = "LOOOOOOL!";
 
@@ -28,6 +28,8 @@ include_once "header.php";
 // specify the page where paging is used
 $page_url = "index.php?";
  
+include_once "main_pageContent.php";
+
 // count total rows - used for pagination
 //$total_rows=$product->countAll();
  

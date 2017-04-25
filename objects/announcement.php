@@ -1,22 +1,77 @@
 <?php
-class Product{
+class Announcement{
  
     // database connection and table name
     private $conn;
-    private $table_name = "products";
+    private $table_name = "announcements";
  
     // object properties
-    public $id;
-    public $name;
-    public $price;
-    public $description;
-    public $category_id;
-    public $timestamp;
+    private $id;
+    private $name;
+    private $description;
+    private $price;
+    
+    private $category_id;
+    private $timestamp;
+    private $addedBy
  
     public function __construct($db){
         $this->conn = $db;
     }
  
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+    public function getId()
+    {
+          return $this->id;
+    }
+
+    public function setDescription( $description)
+    {
+        $this->description= $description;
+    }
+    public function getDescription()
+    {
+          return $this->description;
+    }
+
+    public function setPrice( $price)
+    {
+        $this->price= $price;
+    }
+    public function getPrice()
+    {
+          return $this->price;
+    }
+
+    public function setCategoryId( $category_id )
+    {
+        $this->category_id = $category_id;
+    }
+    public function getCategoryId()
+    {
+          return $this->category_id;
+    }
+
+    public function setTimestamp( $timestamp )
+    {
+        $this->timestamp = $timestamp;
+    }
+    public function getTimestamp()
+    {
+          return $this->timestamp;
+    }
+
+    public function setAddedBy( $addedBy )
+    {
+        $this->addedBy = $addedBy;
+    }
+    public function getAddedBy()
+    {
+          return $this->addedBy;
+    }
     // create product
     function create(){
  
@@ -33,6 +88,7 @@ class Product{
         $this->price=htmlspecialchars(strip_tags($this->price));
         $this->description=htmlspecialchars(strip_tags($this->description));
         $this->category_id=htmlspecialchars(strip_tags($this->category_id));
+        $this->addedBy=$_SESSION['user_session'];
  
         // to get time-stamp for 'created' field
         $this->timestamp = date('Y-m-d H:i:s');
@@ -43,6 +99,7 @@ class Product{
         $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":category_id", $this->category_id);
         $stmt->bindParam(":created", $this->timestamp);
+        $stmt->bindParam(":addedBy", $this->addedBy);
  
         if($stmt->execute()){
             return true;
@@ -55,7 +112,7 @@ class Product{
 	function readAll($from_record_num, $records_per_page){
  
     $query = "SELECT
-                id, name, description, price, category_id
+                id, name, description, price, category_id, addedBy, created
             FROM
                 " . $this->table_name . "
             ORDER BY
@@ -85,7 +142,7 @@ class Product{
 function readOne(){
  
     $query = "SELECT
-                name, price, description, category_id
+                name, price, description, category_id, addedBy, created
             FROM
                 " . $this->table_name . "
             WHERE
@@ -102,6 +159,8 @@ function readOne(){
     $this->name = $row['name'];
     $this->price = $row['price'];
     $this->description = $row['description'];
+    $this->addedBy = $row['addedBy'];
+    $this->created = $row['created'];
     $this->category_id = $row['category_id'];
 }
 
@@ -114,6 +173,7 @@ function update(){
                 name = :name,
                 price = :price,
                 description = :description,
+                modified = :modified,
                 category_id  = :category_id
             WHERE
                 id = :id";
@@ -126,12 +186,14 @@ function update(){
     $this->description=htmlspecialchars(strip_tags($this->description));
     $this->category_id=htmlspecialchars(strip_tags($this->category_id));
     $this->id=htmlspecialchars(strip_tags($this->id));
+    $this->timestamp = date('Y-m-d H:i:s');
  
     // bind parameters
     $stmt->bindParam(':name', $this->name);
     $stmt->bindParam(':price', $this->price);
     $stmt->bindParam(':description', $this->description);
     $stmt->bindParam(':category_id', $this->category_id);
+    $stmt->bindParam(":modified", $this->timestamp);
     $stmt->bindParam(':id', $this->id);
  
     // execute the query

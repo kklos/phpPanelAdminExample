@@ -6,18 +6,46 @@ class Category{
     private $table_name = "categories";
  
     // object properties
-    public $id;
-    public $name;
+    private $id;
+    private $parentId;
+    private $name;
  
     public function __construct($db){
         $this->conn = $db;
+    }
+
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+    public function getId()
+    {
+          return $this->id;
+    }
+
+    public function setParentId( $parentId)
+    {
+        $this->parentId= $parentId;
+    }
+    public function getParentId()
+    {
+          return $this->parentId;
+    }
+
+    public function setName( $name)
+    {
+        $this->name= $name;
+    }
+    public function getName()
+    {
+          return $this->name;
     }
  
     // used by select drop-down list
     function read(){
         //select all data
         $query = "SELECT
-                    id, name
+                    id, parentId, name
                 FROM
                     " . $this->table_name . "
                 ORDER BY

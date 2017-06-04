@@ -11,11 +11,19 @@ if($user->is_loggedin()!="")
 if(isset($_POST['btn-signup']))
 {
 	$uname = strip_tags($_POST['txt_uname']);
+	$ufirstname = strip_tags($_POST['txt_ufirstname']);
+	$ulastname = strip_tags($_POST['txt_ulastname']);
 	$umail = strip_tags($_POST['txt_umail']);
 	$upass = strip_tags($_POST['txt_upass']);	
 	
 	if($uname=="")	{
 		$error[] = "provide username !";	
+	}
+	if($ufirstname=="")	{
+		$error[] = "provide your name !";	
+	}
+	if($ulastname=="")	{
+		$error[] = "provide your lastname !";	
 	}
 	else if($umail=="")	{
 		$error[] = "provide email id !";	
@@ -45,14 +53,14 @@ if(isset($_POST['btn-signup']))
 			}
 			else
 			{
-				if($user->register($uname,$umail,$upass)){	
+				if($user->register($uname, $umail, $upass, $ufirstname, $ulastname)){	
 					$user->redirect('sign-up.php?joined');
 				}
 			}
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
 		}
 	}	
 }
@@ -65,7 +73,7 @@ if(isset($_POST['btn-signup']))
 <title>Coding Cage : Sign up</title>
 <link href="libs/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="libs/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" href="libs/css/style.css" type="text/css"  />
+<link rel="stylesheet" href="libs/css/style-login.css" type="text/css"  />
 </head>
 <body>
 
@@ -97,13 +105,22 @@ if(isset($_POST['btn-signup']))
 			}
 			?>
             <div class="form-group">
-            <input type="text" class="form-control" name="txt_uname" placeholder="Enter Username" value="<?php if(isset($error)){echo $uname;}?>" />
+            <input type="text" class="form-control" name="txt_uname" placeholder="Enter username" value="<?php if(isset($error)){echo $uname;}?>" />
+            </div>
+
+             <div class="form-group">
+            <input type="text" class="form-control" name="txt_ufirstname" placeholder="Enter your name" value="<?php if(isset($error)){echo $ufirstname;}?>" />
+            </div>
+
+            <div class="form-group">
+            <input type="text" class="form-control" name="txt_ulastname" placeholder="Enter your lastname" value="<?php if(isset($error)){echo $ulastname;}?>" />
+            </div>
+
+            <div class="form-group">
+            <input type="text" class="form-control" name="txt_umail" placeholder="Enter adres email" value="<?php if(isset($error)){echo $umail;}?>" />
             </div>
             <div class="form-group">
-            <input type="text" class="form-control" name="txt_umail" placeholder="Enter E-Mail ID" value="<?php if(isset($error)){echo $umail;}?>" />
-            </div>
-            <div class="form-group">
-            	<input type="password" class="form-control" name="txt_upass" placeholder="Enter Password" />
+            	<input type="password" class="form-control" name="txt_upass" placeholder="Enter your own password" />
             </div>
             <div class="clearfix"></div><hr />
             <div class="form-group">

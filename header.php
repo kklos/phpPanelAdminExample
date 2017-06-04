@@ -1,12 +1,19 @@
 <?php
 
     require_once("session.php");
+
     
     require_once("objects/user.php");
+
+    $database = new Database();
+    $db = $database->getConnection();
     $auth_user = new USER();
-    
+    $userDetails = new User($db);
+ 
+    $userDetails->getUserDetails();
     
     $user_id = $_SESSION['user_session'];
+    $user_username = $userDetails->user_name;
     
     $stmt = $auth_user->runQuery("SELECT * FROM users WHERE user_id=:user_id");
     $stmt->execute(array(":user_id"=>$user_id));
@@ -30,54 +37,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
 
     <!-- Bootstrap core CSS -->
-    <link href="libs/css/bootstrap.min.css" rel="stylesheet">
+    <link href="libs/css/metro-bootstrap.min.css" rel="stylesheet">
 
-    <!-- Material Design Bootstrap -->
-    <link href="libs/css/mdb.min.css" rel="stylesheet">
-
-    <!-- Template styles -->
-    <style rel="stylesheet">
-        /* TEMPLATE STYLES */
-        
-        main {
-            padding-top: 3rem;
-            padding-bottom: 2rem;
-        }
-        
-        .widget-wrapper {
-            padding-bottom: 2rem;
-            border-bottom: 1px solid #e0e0e0;
-            margin-bottom: 2rem;
-        }
-         
-        .reviews {
-            text-align: center;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 1rem;
-            margin-top: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .price {
-            position: absolute;
-            left: 0;
-            top: 0;
-            margin-top: -2px;
-        }
-        
-        .price .tag {
-            margin: 0;
-        }
-          .navbar {
-            background-color: #676b74;
-        }
-        
-        footer.page-footer {
-            background-color: #676b74;
-            margin-top: 2rem;
-        }
-    </style>
 
 </head>
 
@@ -86,47 +47,43 @@
 
     <header>
 
-        <!--Navbar-->
-        <nav class="navbar navbar-toggleable-md navbar-dark">
-            <div class="container">
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav1" aria-controls="navbarNav1" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <a class="navbar-brand" href="#">
-                    <strong>Navbar</strong>
-                </a>
-                <div class="collapse navbar-collapse" id="navbarNav1">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link">Pricing</a>
-                        </li>
-                        <li class="nav-item dropdown btn-group">
-                            <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                            <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
-                                <a class="dropdown-item">Action</a>
-                                <a class="dropdown-item">Another action</a>
-                                <a class="dropdown-item">Something else here</a>
-                            </div>
-                        </li>
-                    </ul>
-                    <form class="form-inline waves-effect waves-light">
-                        <input class="form-control" type="text" placeholder="Search">
-                    </form>
-                </div>
-            </div>
-        </nav>
-	    <!--/.Navbar-->
+        <nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.php">
+       Main page
+    </a>
+  </div>
 
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+   <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href=""><?php echo"<strong>Witaj użytkowniku {$user_username}</strong>";?></a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link waves-effect waves-light" href="logout.php?logout=true"><i class="fa fa-gear"></i> Logout</a>
+      </li>
+
+       <li class="dropdown">
+        <a href="" class="dropdown-toggle fa fa-user" data-toggle="dropdown"> Profile <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="profile_details.php">Browse</a></li>
+
+          <li><a href="update_profile.php">Edit</a></li>
+          <li><a href="#">Change password</a></li>
+        </ul>
+      </li>
+
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
     </header>
 
-    <main>
-
-        <!--Main layout-->
-        <div class="container">
-            <div class="row">
+       

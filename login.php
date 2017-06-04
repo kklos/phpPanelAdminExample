@@ -1,12 +1,12 @@
 <?php
 session_start();
-require_once("objects/User.php");
+require_once("objects/user.php");
 $login = new USER();
 
-if($login->is_loggedin()!="")
-{
-	$login->redirect('index.php');
-}
+//if($login->is_loggedin()!="")
+//{
+	//$login->redirect('index.php');
+//}
 
 if(isset($_POST['btn-login']))
 {
@@ -29,9 +29,9 @@ if(isset($_POST['btn-login']))
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Coding Cage : Login</title>
-<link href="libs/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="libs/css/metro-bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="libs/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" href="libs/css/style.css" type="text/css"  />
+<link rel="stylesheet" href="libs/css/style-login.css" type="text/css"  />
 </head>
 <body>
 

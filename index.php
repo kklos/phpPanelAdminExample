@@ -28,7 +28,7 @@ include_once "header.php";
 // specify the page where paging is used
 $page_url = "index.php?";
  
-include_once "main_pageContent.php";
+include_once "admin_panel.php";
 
 // count total rows - used for pagination
 //$total_rows=$product->countAll();

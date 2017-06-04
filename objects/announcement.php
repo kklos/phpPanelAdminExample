@@ -13,7 +13,7 @@ class Announcement{
     
     private $category_id;
     private $timestamp;
-    private $addedBy
+    private $addedBy;
  
     public function __construct($db){
         $this->conn = $db;
@@ -109,22 +109,55 @@ class Announcement{
  
     }
 
-	function readAll($from_record_num, $records_per_page){
+	function readAllForSpecifyMainCategory($from_record_num, $records_per_page, $mainCategoryNum){
  
     $query = "SELECT
-                id, name, description, price, category_id, addedBy, created
+                p.id, p.name, p.description, p.price, p.category_id, p.addedBy, p.created
             FROM
-                " . $this->table_name . "
+            " . $this->table_name . " p
+                LEFT JOIN
+                    categories c
+                        ON p.category_id = c.id
+            WHERE
+                c.parentId LIKE ?
             ORDER BY
                 name ASC
             LIMIT
                 {$from_record_num}, {$records_per_page}";
  
-    $stmt = $this->conn->prepare( $query );
+   $stmt = $this->conn->prepare( $query );
+    $stmt->bindParam(1, $mainCategoryNum);
+ 
     $stmt->execute();
  
     return $stmt;
 	}
+
+  function readAllForSpecifySubCategory($from_record_num, $records_per_page, $mainCategoryNum, 
+    $subCategoryNum){
+ 
+   $query = "SELECT
+                p.id, p.name, p.description, p.price, p.category_id, p.addedBy, p.created
+            FROM
+            " . $this->table_name . " p
+                LEFT JOIN
+                    categories c
+                        ON p.category_id = c.id
+            WHERE
+                c.parentId LIKE ? AND p.category_id LIKE ?
+            ORDER BY
+                name ASC
+            LIMIT
+                {$from_record_num}, {$records_per_page}";
+ 
+ $stmt = $this->conn->prepare( $query );
+    $stmt->bindParam(1, $mainCategoryNum);
+    $stmt->bindParam(2, $subCategoryNum);
+   
+    $stmt->execute();
+ 
+    return $stmt;
+    }
 
 	// used for paging products
 	public function countAll(){
@@ -225,7 +258,7 @@ public function search($search_term, $from_record_num, $records_per_page){
  
     // select query
     $query = "SELECT
-                c.name as category_name, p.id, p.name, p.description, p.price, p.category_id, p.created
+                c.name as category_name, p.id, p.name, p.description, p.price, p.category_id, p.created, p.addedBy
             FROM
                 " . $this->table_name . " p
                 LEFT JOIN
